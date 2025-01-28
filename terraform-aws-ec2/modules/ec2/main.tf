@@ -32,8 +32,8 @@ resource "aws_security_group" "vectre_instance_sg" {
   }
 
   ingress {
-    from_port   = 8081
-    to_port     = 8081
+    from_port   = 443
+    to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -73,6 +73,38 @@ resource "aws_instance" "vectre_instance" {
   key_name      = aws_key_pair.my_key_pair.key_name
   subnet_id     = var.public_subnets[2]  
   vpc_security_group_ids = [aws_security_group.vectre_instance_sg.id]
+
+  user_data = <<-EOF
+              #!/bin/bash
+              # Install Docker
+              sudo yum update -y
+              sudo yum install -y docker wget unzip
+              sudo systemctl enable docker
+              sudo systemctl start docker
+              sudo usermod -aG docker ec2-user
+
+              # Install Docker Compose
+              wget https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) 
+              sudo mv docker-compose-$(uname -s)-$(uname -m) /usr/local/bin/docker-compose
+              sudo chmod -v +x /usr/local/bin/docker-compose
+
+              # Create VECTR directory and set permissions
+              sudo mkdir -p /opt/vectr
+              sudo chown ec2-user:ec2-user /opt/vectr
+
+              # Download and extract VECTR
+              cd /opt/vectr
+              wget https://github.com/SecurityRiskAdvisors/VECTR/releases/download/ce-9.5.2/sra-vectr-runtime-9.5.2-ce.zip 
+              unzip sra-vectr-runtime-9.5.2-ce.zip
+
+              # Update .env file with new JWS/JWE keys and ALB hostname
+              sed -i 's/JWS_KEY=.*/JWS_KEY=VectrJWSKey123!@#/' .env
+              sed -i 's/JWE_KEY=.*/JWE_KEY=VectrJWEKey456!@#/' .env
+              sed -i "s/VECTR_PORT=.*/VECTR_PORT=443/" .env
+
+              # Set proper permissions for docker.sock
+              sudo chmod 666 /var/run/docker.sock
+              EOF
 
   tags = {
     Name = "vectre-instance"

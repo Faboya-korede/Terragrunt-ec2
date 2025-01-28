@@ -78,17 +78,22 @@ resource "aws_lb" "secondary_lb" {
 resource "aws_lb_target_group" "vectre_tg" {
   name        = "vectre-tg"
   port        = 8081
-  protocol    = "HTTP"
+  protocol    = "HTTPS"
   vpc_id      = var.vpc_id
   target_type = "instance"
 
   health_check {
     path                = "/"
-    interval            = 100
-    timeout             = 90
+    interval            = 30
+    timeout             = 10
     healthy_threshold   = 2
-    unhealthy_threshold = 10
+    unhealthy_threshold = 3
     matcher             = "200-399"
+  }
+  # Ignore SSL validation for health checks
+  stickiness {
+    type    = "lb_cookie"
+    enabled = true
   }
 
   tags = var.tags
@@ -132,6 +137,7 @@ resource "aws_lb_listener" "vectre_http_listener" {
   load_balancer_arn = aws_lb.vectre_lb.arn
   port              = "443"
   protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
 
 certificate_arn = data.aws_acm_certificate.existing_cert.arn
 
@@ -142,6 +148,7 @@ certificate_arn = data.aws_acm_certificate.existing_cert.arn
 
   tags = var.tags
 }
+
 
 # Listener for the second LB
 resource "aws_lb_listener" "secondary_http_listener" {
