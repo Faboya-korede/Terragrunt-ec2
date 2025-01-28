@@ -96,14 +96,20 @@ resource "aws_instance" "vectre_instance" {
               cd /opt/vectr
               wget https://github.com/SecurityRiskAdvisors/VECTR/releases/download/ce-9.5.2/sra-vectr-runtime-9.5.2-ce.zip 
               unzip sra-vectr-runtime-9.5.2-ce.zip
+              VECTR_HOSTNAME
 
               # Update .env file with new JWS/JWE keys and ALB hostname
               sed -i 's/JWS_KEY=.*/JWS_KEY=VectrJWSKey123!@#/' .env
               sed -i 's/JWE_KEY=.*/JWE_KEY=VectrJWEKey456!@#/' .env
               sed -i "s/VECTR_PORT=.*/VECTR_PORT=443/" .env
+              sed -i "s/VECTR_HOSTNAME=.*/VECTR_HOSTNAME=${var.sub_domain}/" .env
 
               # Set proper permissions for docker.sock
               sudo chmod 666 /var/run/docker.sock
+
+              # Start VECTR using Docker Compose
+              cd /opt/vectr
+              sudo docker-compose -f docker-compose.yml up -d
               EOF
 
   tags = {

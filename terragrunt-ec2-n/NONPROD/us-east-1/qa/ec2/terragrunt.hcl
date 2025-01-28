@@ -48,4 +48,5 @@ inputs = {
   version     = "~> 1.0.9"
   vpc_id      = dependency.vpc.outputs.vpc_non_prod
   public_subnets = dependency.vpc.outputs.public_subnets
+  sub_domain = "test.korede.tech"
 }
