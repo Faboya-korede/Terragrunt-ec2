@@ -35,14 +35,8 @@ dependency "ec2" {
 dependency "vpc" {
   config_path = "../vpc"
   mock_outputs = {
-    vpc_id = "vpc-012341a0dd8b01234",
     vpc_prod = "vpc-012341a0dd8b01234",
-    private_subnets = [
-      "subnet-003601fe683fd1111",
-      "subnet-0f0787cffc6ae1112",
-      "subnet-00e05034aa90b1112"
-    ],
-    public_subnets = [
+    prod_subnets = [
         "subnet-003601fe683fd1114",
       "subnet-0f0787cffc6ae1114",
       "subnet-00e05034aa90b1114"

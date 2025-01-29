@@ -2,7 +2,7 @@
 # terragrunt.hcl configuration.
 locals {
   account_name = "prod"
-  aws_profile  = "prod"
+  aws_profile  = "basil"
   domain_name  = "mydomain.io"
   owner        = "me"
 }

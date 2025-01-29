@@ -16,6 +16,7 @@ locals {
 
   # Extract the variables we need for easy access
   account_name  = local.account_vars.locals.account_name
+  aws_profile   = local.account_vars.locals.aws_profile
   region        = local.region_vars.locals.region
   domain_name   = local.account_vars.locals.domain_name
   instance_type = local.environment_vars.locals.instance_type
@@ -29,6 +30,7 @@ generate "provider" {
   contents  = <<EOF
 provider "aws" {
   region = "${local.region}"
+  profile = "${local.aws_profile}"
 
   # Only these AWS Account IDs may be operated on by this template
 }

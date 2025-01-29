@@ -1,7 +1,7 @@
 
  
 output "prod_subnets" {
-  value = module.vpc.prod
+  value = module.vpc.prod_subnets
 }
 
 

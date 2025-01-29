@@ -6,5 +6,5 @@ locals {
   app_name  = "ECS"
   domain_name  = "IT.Security"
   owner        = "me"
-
+  aws_profile  = "basil"
 }

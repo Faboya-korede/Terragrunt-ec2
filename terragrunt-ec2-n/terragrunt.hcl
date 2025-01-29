@@ -20,6 +20,7 @@ locals {
   domain_name   = local.account_vars.locals.domain_name
   instance_type = local.environment_vars.locals.instance_type
   owner         = local.account_vars.locals.owner
+  aws_profile   = local.account_vars.locals.aws_profile
 }
 
 # Generate an AWS provider block
@@ -29,6 +30,8 @@ generate "provider" {
   contents  = <<EOF
 provider "aws" {
   region = "${local.region}"
+  profile = "${local.aws_profile}"
+  
 
   # Only these AWS Account IDs may be operated on by this template
 }
@@ -41,7 +44,7 @@ remote_state {
   config = {
     encrypt        = true
     #bucket         = "${get_env("TG_BUCKET_PREFIX", "")}terragrunt-example-terraform-state-${local.account_name}-${local.region}"
-    bucket = "ec2-bucket"
+    bucket = "irecharge-bucket"
     key            = "${path_relative_to_include()}/terraform.tfstate"
     region         = local.region
 

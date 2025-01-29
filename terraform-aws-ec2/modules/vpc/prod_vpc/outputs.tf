@@ -1,4 +1,4 @@
-output "prod" {
+output "prod_subnets" {
     value = local.prod_subnets
 }
 
