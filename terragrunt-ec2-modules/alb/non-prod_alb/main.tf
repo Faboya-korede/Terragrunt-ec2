@@ -1,6 +1,6 @@
 module "alb" {
-  source = "C:/Users/T476783/Documents/CloudSecurity/terraform/terraform-aws-ec2/modules/alb"
-  # source = "/Users/macbook/Downloads/deluxe-development-terraform-6f5f94b6b974/terraform-aws-ec2/modules/alb"
+  #source = "C:/Users/T476783/Documents/CloudSecurity/terraform/terraform-aws-ec2/modules/alb"
+   source = "/Users/macbook/Downloads/deluxe-development-terraform-6f5f94b6b974/terraform-aws-ec2/modules/alb"
   name            = var.name
   tags            = var.tags
   vpc_id          = var.vpc_id

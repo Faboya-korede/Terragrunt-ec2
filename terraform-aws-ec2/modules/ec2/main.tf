@@ -1,7 +1,9 @@
 # Create the key pair
 resource "aws_key_pair" "my_key_pair" {
-  key_name   = "key-pair" 
+  key_name   = "${var.name}-key-pair" 
   public_key = tls_private_key.my_key_pair.public_key_openssh
+
+  tags = var.tags
 }
 
 # Generate the private key locally
@@ -20,9 +22,11 @@ resource "local_file" "private_key" {
 
 
 resource "aws_security_group" "vectre_instance_sg" {
-  name        = "vectre-instance-sg"
+  name        = "${var.name}-vectre-instance-sg"
   description = "Security group for vectre instance"
   vpc_id      = var.vpc_id
+
+  tags = var.tags
 
   ingress {
     from_port   = 22
@@ -47,9 +51,10 @@ resource "aws_security_group" "vectre_instance_sg" {
 }
 
 resource "aws_security_group" "second_instance_sg" {
-  name        = "second-instance-sg"
+  name        = "${var.name}-second-instance-sg"
   description = "Security group for the second instance"
   vpc_id      = var.vpc_id
+  tags = var.tags
 
   ingress {
     from_port   = 22
@@ -112,9 +117,7 @@ resource "aws_instance" "vectre_instance" {
               sudo docker-compose -f docker-compose.yml up -d
               EOF
 
-  tags = {
-    Name = "vectre-instance"
-  }
+  tags = var.tags
 }
 
 resource "aws_instance" "second_instance" {
@@ -124,7 +127,5 @@ resource "aws_instance" "second_instance" {
   subnet_id     = var.public_subnets[1]  
   vpc_security_group_ids = [aws_security_group.second_instance_sg.id]
 
-  tags = {
-    Name = "second-instance"
-  }
+  tags = var.tags
 }

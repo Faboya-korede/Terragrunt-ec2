@@ -5,4 +5,5 @@ module "ec2" {
   vpc_id          = var.vpc_id
   public_subnets  = var.public_subnets
   sub_domain  = var.sub_domain
+  tags            = var.tags
 }
