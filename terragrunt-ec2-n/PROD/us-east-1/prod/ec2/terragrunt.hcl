@@ -23,9 +23,8 @@ include {
 dependency "vpc" {
   config_path = "../vpc"
   mock_outputs = {
-    vpc_id = "vpc-012341a0dd8b01234",
     vpc_prod = "vpc-012341a0dd8b01234",
-    public_subnets = [
+    prod_subnets = [
         "subnet-003601fe683fd1114",
       "subnet-0f0787cffc6ae1114",
       "subnet-00e05034aa90b1114"
@@ -46,7 +45,7 @@ inputs = {
     Owner       = "${local.owner}"
   }
   version     = "~> 1.0.9"
-  vpc_id      = dependency.vpc.outputs.vpc_prod
-  public_subnets = dependency.vpc.outputs.public_subnets
+  vpc_id = dependency.vpc.outputs.vpc_prod
+  public_subnets = dependency.vpc.outputs.prod_subnets
   sub_domain = "test.korede.tech"
 }

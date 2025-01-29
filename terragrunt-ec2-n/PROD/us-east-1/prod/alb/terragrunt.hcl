@@ -21,8 +21,8 @@ include {
   path = find_in_parent_folders()
 }
 
-dependency "ecs" {
-  config_path = "../ecs"
+dependency "ec2" {
+  config_path = "../ec2"
   mock_outputs = {
     cluster_id     = "arn:aws:ecs:us-east-1:067653612345:cluster/app-qa"
     instance_role  = "app-qa-instance-role"
@@ -59,8 +59,8 @@ inputs = {
   }
   version      = "~> 1.0.9"
   vpc_id         = dependency.vpc.outputs.vpc_prod
-  public_subnets = dependency.vpc.outputs.public_subnets
-  domain         = "korede.tech"
+  public_subnets = dependency.vpc.outputs.prod_subnets
+  domain         = "domain.name"
   vectre_instance_id = dependency.ec2.outputs.vectre_instance_id
   second_instance_id = dependency.ec2.outputs.second_instance_id
 }
